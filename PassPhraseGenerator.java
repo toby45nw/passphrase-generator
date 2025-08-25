@@ -1,5 +1,4 @@
 import java.security.SecureRandom;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -7,70 +6,28 @@ import java.util.Set;
 import java.util.List;
 
 public class PassPhraseGenerator {
-    Map<String, String> wordMap;
-    int numberOfWords;
-    int numberOfSymbols;
-    int numberOfCapitalLetters;
-    int numberOfDigits;
 
-    private static SecureRandom rand = new SecureRandom();
+    private final SecureRandom rand;
+    private final PassPhraseComponentGenerator componentGenerator;
 
-    ArrayList<String> words = new ArrayList<>();
-    ArrayList<Character> specialCharcters = new ArrayList<>();
-    ArrayList<Integer> digits = new ArrayList<>();
-
-    List<Object> passPhrase = new ArrayList<>();
-
-
-    public PassPhraseGenerator(Map<String, String> wordMap, int numberOfWords, int numberOfSymbols, int numberOfCapitalLetters, int numberOfDigits) {
-        this.wordMap = wordMap;
-        this.numberOfWords = numberOfWords;
-        this.numberOfSymbols = numberOfSymbols;
-        this.numberOfCapitalLetters = numberOfCapitalLetters;
-        this.numberOfDigits = numberOfDigits;
-
-        // Get the amount of words the user wants
-        for (int i = 0; i < numberOfWords; i++) {
-            words.add(getWord());
-        }
-
-        // Capitalize how ever may charcter the user wants
-        capitaliseRandomCharacters();
-
-
-        // Get a special character
-        for (int i = 0; i < numberOfSymbols; i++) {
-            specialCharcters.add(getSpecialCharacter());
-        }
-
-        for (int i=0; i<numberOfDigits; i++) {
-            digits.add(rand.nextInt(10));
-        }
-
-        assemblePassPhrase();
+    public PassPhraseGenerator(PassPhraseComponentGenerator componentGenerator, SecureRandom rand) {
+        this.rand = rand;
+        this.componentGenerator = componentGenerator;
     }
 
-    private String getWord() {
-        String word;
-        String wordNumber = ""; 
+    public PassPhrase generate(int numberOfWords, int numberOfSymbols, int numberOfDigits, int numberOfCapitalLetters) {
 
-        for (int j = 0; j < 5; j++) {
-            int number = rand.nextInt(6) + 1;
-            wordNumber += Integer.toString(number);
-        }
-        
-        word = wordMap.get(wordNumber);
-        return word;
+        ArrayList<String> words = componentGenerator.generateWords(numberOfWords);
+        ArrayList<Character> specialCharacters = componentGenerator.generateSpecialCharacters(numberOfSymbols);
+        ArrayList<Integer> digits = componentGenerator.generateDigits(numberOfDigits);
+
+        capitaliseRandomCharacters(words, numberOfCapitalLetters);
+
+        return new PassPhrase(assemblePassPhrase(words, specialCharacters, digits));
+
     }
 
-    private char getSpecialCharacter() {
-        String specialCharcters = "!#$%^&*()=-+[]\\{}:;\"'<>?/";
-        int randomIndex = rand.nextInt(specialCharcters.length());
-        char specialCharcter = specialCharcters.charAt(randomIndex);
-        return specialCharcter;
-    }
-
-    private ArrayList<String> capitaliseRandomCharacters() {
+    private ArrayList<String> capitaliseRandomCharacters(ArrayList<String> words, int numberOfCapitalLetters) {
 
         Set<Position> usedPositions = new HashSet<>();
 
@@ -101,15 +58,16 @@ public class PassPhraseGenerator {
         return words;
     }
 
-    private void assemblePassPhrase() {
+    private String assemblePassPhrase(ArrayList<String> words, ArrayList<Character> specialCharacters, ArrayList<Integer> digits) {
 
+        List<Object> passPhrase = new ArrayList<>();
         
         for (String s : words) {
             passPhrase.add(s);
         }
 
         // Add elements from the char array
-        for (char c : specialCharcters) {
+        for (char c : specialCharacters) {
             passPhrase.add(c);
         }
 
@@ -132,8 +90,7 @@ public class PassPhraseGenerator {
         // Convert to a final string
         String result = finalString.toString();
 
-        // Print the result
-        System.out.println(result);
+        return result;
     }
 
 }

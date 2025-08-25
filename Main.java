@@ -1,23 +1,24 @@
+import java.security.SecureRandom;
 import java.util.Map;
 
 public class Main {
     public static void main(String args[]){
-        int numberOfWords;
-        int numberOfSymbols;
-        int numberOfCapitalLetters;
-        int numberOfDigits;
 
-        // Give the user the option to change these parameter later
-        numberOfWords = 3;
-        numberOfSymbols = 2;
-        numberOfCapitalLetters = 2;
-        numberOfDigits = 2;
+        final SecureRandom rand = new SecureRandom();
+        final Map<String, String> wordMap = new WordMapGenerator().getWordMap();
 
-        WordMapGenerator wordMapGenerator = new WordMapGenerator();
-        Map<String, String> wordMap = wordMapGenerator.getWordMap();
+        int numberOfWords = 3;
+        int numberOfSymbols = 2;
+        int numberOfCapitalLetters = 2;
+        int numberOfDigits = 2;
 
-        PassPhraseGenerator passPhraseGenerator = new PassPhraseGenerator(wordMap, numberOfWords, numberOfSymbols, numberOfCapitalLetters, numberOfDigits);
+        PassPhraseComponentGenerator passPhraseComponentGenerator = new PassPhraseComponentGenerator(wordMap, rand);
 
+        PassPhraseGenerator passPhraseGenerator = new PassPhraseGenerator(passPhraseComponentGenerator, rand);
+
+        PassPhrase passPhrase = passPhraseGenerator.generate(numberOfWords, numberOfSymbols, numberOfDigits, numberOfCapitalLetters);
+
+        System.out.println(passPhrase);
 
     }
     
