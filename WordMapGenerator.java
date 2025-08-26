@@ -10,9 +10,9 @@ import java.io.IOException;
 public class WordMapGenerator {
     private final Map<String, String> wordMap;
     
-    public WordMapGenerator() {
+    public WordMapGenerator(String wordlistPath) {
         Map<String, String> tempMap = new HashMap<String, String>();
-        Path filePath = Paths.get("eff_large_wordlist.txt");
+        Path filePath = Paths.get(wordlistPath);
 
         try {
             List<String> lines = Files.readAllLines(filePath);
@@ -20,10 +20,10 @@ public class WordMapGenerator {
             for (String line : lines) {
                 String[] parts = line.split("\t", 2);
                 tempMap.put(parts[0], parts[1]);
-            } 
+            }
 
-            } catch (IOException e) {
-                e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading wordlist file: " + wordlistPath, e);
         }
 
         this.wordMap = Collections.unmodifiableMap(tempMap);

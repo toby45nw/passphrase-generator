@@ -23,4 +23,12 @@ public class Position {
     public int hashCode() {
         return Objects.hash(wordIndex, letterIndex);
     }
+
+    public int getWordIndex() {
+        return wordIndex;
+    }
+
+    public int getLetterIndex() {
+        return letterIndex;
+    }
 }

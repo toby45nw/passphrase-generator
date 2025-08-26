@@ -7,6 +7,9 @@ public class PassPhraseComponentGenerator {
     private final SecureRandom rand;
     private final Map<String, String> wordMap;
     private static final String SPECIAL_CHARACTERS = "!#$%^&*()=-+[]\\{}:;\"'<>?/";
+    private static final int DICE_ROLLS_PER_WORD = 5;
+    private static final int DICE_SIDES = 6;
+
 
     public PassPhraseComponentGenerator(Map<String, String> wordMap, SecureRandom rand) {
         this.wordMap = wordMap;
@@ -40,8 +43,8 @@ public class PassPhraseComponentGenerator {
 
     private String generateWord() {
         StringBuilder wordNumber = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
-            wordNumber.append(rand.nextInt(6) + 1);
+        for (int i = 0; i < DICE_ROLLS_PER_WORD; i++) {
+            wordNumber.append(rand.nextInt(DICE_SIDES) + 1);
         }
         return wordMap.get(wordNumber.toString());
     }
