@@ -1,17 +1,28 @@
 import java.security.SecureRandom;
 import java.util.Map;
 
+/**
+ * The main class for the passphrase generator program.
+ * This class handles command-line arguments and runs the passphrase generation process.
+ */
 public class Main {
+    /**
+     * The entry point of the application.
+     *
+     * @param args Command-line arguments to customize the passphrase generation.
+     */
     public static void main(String args[]){
 
         final SecureRandom rand = new SecureRandom();
         final Map<String, String> wordMap = new WordMapGenerator("eff_large_wordlist.txt").getWordMap();
 
+        // Default values for passphrase components
         int numberOfWords = 3;
         int numberOfSymbols = 2;
         int numberOfCapitalLetters = 2;
         int numberOfDigits = 2;
 
+        // Parse command-line arguments
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-w":
@@ -63,12 +74,12 @@ public class Main {
             }
         }
 
+        // Initialize the component and passphrase generators
         PassPhraseComponentGenerator passPhraseComponentGenerator = new PassPhraseComponentGenerator(wordMap, rand);
-
         PassPhraseGenerator passPhraseGenerator = new PassPhraseGenerator(passPhraseComponentGenerator, rand);
 
+        // Generate and print the passphrase
         PassPhrase passPhrase = passPhraseGenerator.generate(numberOfWords, numberOfSymbols, numberOfDigits, numberOfCapitalLetters);
-
         System.out.println(passPhrase);
 
     }
