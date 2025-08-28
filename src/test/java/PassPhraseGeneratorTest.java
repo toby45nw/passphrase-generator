@@ -46,7 +46,7 @@ public class PassPhraseGeneratorTest {
 
         // When
         PassPhrase passPhrase = passPhraseGenerator.generate(numberOfWords, numberOfSymbols, numberOfDigits, numberOfCapitalLetters);
-        String passPhraseValue = passPhrase.getValue();
+        String passPhraseValue = passPhrase.value();
 
         // Then
         long wordCount = Arrays.stream(passPhraseValue.split("[^a-zA-Z]+")).filter(s -> !s.isEmpty()).count();

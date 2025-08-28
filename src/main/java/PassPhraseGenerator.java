@@ -70,8 +70,8 @@ public class PassPhraseGenerator {
         // Capitalize the characters at the chosen random positions
         for (int i = 0; i < lettersToCapitalize; i++) {
             Position pos = allPositions.get(i);
-            int wordIndex = pos.getWordIndex();
-            int letterIndex = pos.getLetterIndex();
+            int wordIndex = pos.wordIndex();
+            int letterIndex = pos.letterIndex();
 
             String word = words.get(wordIndex);
             char[] wordChars = word.toCharArray();
